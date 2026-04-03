@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🍀 행운의 번호</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      letter-spacing: 2px;
+    }
+
+    p.subtitle {
+      color: #aaa;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    button {
+      background: linear-gradient(135deg, #f7971e, #ffd200);
+      color: #1a1a2e;
+      border: none;
+      padding: 0.8rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-bottom: 2.5rem;
+      transition: transform 0.1s, box-shadow 0.2s;
+      box-shadow: 0 4px 20px rgba(255, 210, 0, 0.4);
+    }
+
+    button:hover { transform: scale(1.05); }
+    button:active { transform: scale(0.97); }
+
+    #sets {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .set {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 16px;
+      padding: 1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      animation: fadeIn 0.4s ease both;
+    }
+
+    .set-label {
+      font-size: 0.85rem;
+      color: #aaa;
+      min-width: 44px;
+    }
+
+    .balls {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .ball {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 0.95rem;
+      box-shadow: inset 0 -3px 6px rgba(0,0,0,0.3), 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .ball.normal { background: linear-gradient(135deg, #4facfe, #00f2fe); color: #fff; }
+    .ball.bonus  { background: linear-gradient(135deg, #f7971e, #ffd200); color: #1a1a2e; }
+
+    .divider {
+      color: #555;
+      font-size: 1.2rem;
+      margin: 0 0.3rem;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .set:nth-child(1) { animation-delay: 0.05s; }
+    .set:nth-child(2) { animation-delay: 0.15s; }
+    .set:nth-child(3) { animation-delay: 0.25s; }
+    .set:nth-child(4) { animation-delay: 0.35s; }
+    .set:nth-child(5) { animation-delay: 0.45s; }
+  </style>
+</head>
+<body>
+  <h1>🍀 행운의 번호</h1>
+  <p class="subtitle">1~45 사이의 숫자 중 6개 + 보너스 1개</p>
+  <button onclick="generate()">번호 생성</button>
+  <div id="sets"></div>
+
+  <script>
+    function sample(n, max) {
+      const pool = Array.from({length: max}, (_, i) => i + 1);
+      for (let i = pool.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [pool[i], pool[j]] = [pool[j], pool[i]];
+      }
+      return pool.slice(0, n);
+    }
+
+    function generate() {
+      const container = document.getElementById('sets');
+      container.innerHTML = '';
+
+      for (let i = 1; i <= 5; i++) {
+        const picked = sample(7, 45);
+        const nums = picked.slice(0, 6).sort((a, b) => a - b);
+        const bonus = picked[6];
+
+        const set = document.createElement('div');
+        set.className = 'set';
+
+        const label = document.createElement('span');
+        label.className = 'set-label';
+        label.textContent = `${i}세트`;
+
+        const balls = document.createElement('div');
+        balls.className = 'balls';
+
+        nums.forEach(n => {
+          const b = document.createElement('div');
+          b.className = 'ball normal';
+          b.textContent = n;
+          balls.appendChild(b);
+        });
+
+        const divider = document.createElement('span');
+        divider.className = 'divider';
+        divider.textContent = '+';
+
+        const bonusBall = document.createElement('div');
+        bonusBall.className = 'ball bonus';
+        bonusBall.textContent = bonus;
+
+        set.appendChild(label);
+        set.appendChild(balls);
+        set.appendChild(divider);
+        set.appendChild(bonusBall);
+        container.appendChild(set);
+      }
+    }
+  </script>
+</body>
+</html>
